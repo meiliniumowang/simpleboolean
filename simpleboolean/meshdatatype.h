@@ -11,6 +11,11 @@ struct Vertex
     float xyz[3];
 };
 
+struct Vector
+{
+    float xyz[3];
+};
+
 struct Face
 {
     size_t indices[3];

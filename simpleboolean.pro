@@ -1,5 +1,3 @@
-TEMPLATE = lib
-
 CONFIG += release
 DEFINES += NDEBUG
 
@@ -29,8 +27,16 @@ HEADERS += simpleboolean/distinguish.h
 SOURCES += simpleboolean/meshcombiner.cpp
 HEADERS += simpleboolean/meshcombiner.h
 
+SOURCES += simpleboolean/util.cpp
+HEADERS += simpleboolean/util.h
+
+SOURCES += simpleboolean/triangulate.cpp
+HEADERS += simpleboolean/triangulate.h
+
 SOURCES += thirdparty/moller97/tritri_isectline.cpp
 HEADERS += thirdparty/moller97/tritri_isectline.h
+
+SOURCES += main.cpp
 
 QMAKE_CXXFLAGS += -std=c++11
 

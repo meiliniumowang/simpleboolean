@@ -8,10 +8,10 @@ namespace simpleboolean
 class ReTriangulation
 {
 public:
-    void reTriangulate(const std::vector<Vertex> &vertices,
+    static void reTriangulate(const std::vector<Vertex> &vertices,
         const std::vector<size_t> &triangle,
         const std::vector<std::vector<size_t>> &edgeLoops,
-        std::vector<std::vector<size_t>> &reTriangulatedTriangles);
+        std::vector<Face> &reTriangulatedTriangles);
 };
   
 }

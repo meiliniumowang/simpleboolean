@@ -227,7 +227,7 @@ void MeshCombiner::combine(Operation operation)
             reTriangulatedFacesInSecondMesh.insert(pair.second);
         }
     }
-    auto doReTriangulation = [&](const Mesh *mesh, const std::map<size_t, std::vector<std::pair<size_t, size_t>>> &newEdgesPerTriangle, std::vector<std::vector<size_t>> &toTriangles, std::vector<std::vector<size_t>> &edgeLoops) {
+    auto doReTriangulation = [&](const Mesh *mesh, const std::map<size_t, std::vector<std::pair<size_t, size_t>>> &newEdgesPerTriangle, std::vector<Face> &toTriangles, std::vector<std::vector<size_t>> &edgeLoops) {
         for (const auto &it: newEdgesPerTriangle) {
             const auto &face = mesh->faces[it.first];
             const std::vector<std::pair<size_t, size_t>> &newEdges = it.second;
@@ -238,7 +238,7 @@ void MeshCombiner::combine(Operation operation)
                 newVertexToIndex(mesh->vertices[face.indices[1]]),
                 newVertexToIndex(mesh->vertices[face.indices[2]]),
             };
-            std::vector<std::vector<size_t>> reTriangulatedTriangles;
+            std::vector<Face> reTriangulatedTriangles;
             ReTriangulation re;
             re.reTriangulate(m_newVertices, triangleVertices, edgeLoopsPerFace, reTriangulatedTriangles);
             for (const auto &loop: edgeLoopsPerFace) {
@@ -250,16 +250,16 @@ void MeshCombiner::combine(Operation operation)
         }
     };
     auto addUnIntersectedFaces = [&](const Mesh *mesh, const std::set<size_t> &reTriangulatedFaces,
-            std::vector<std::vector<size_t>> &toTriangles) {
+            std::vector<Face> &toTriangles) {
         for (size_t i = 0; i < mesh->faces.size(); ++i) {
             if (reTriangulatedFaces.find(i) != reTriangulatedFaces.end())
                 continue;
             const auto &face = mesh->faces[i];
-            std::vector<size_t> triangle = {
+            Face triangle = {{
                 newVertexToIndex(mesh->vertices[face.indices[0]]),
                 newVertexToIndex(mesh->vertices[face.indices[1]]),
                 newVertexToIndex(mesh->vertices[face.indices[2]]),
-            };
+            }};
             toTriangles.push_back(triangle);
         }
     };
@@ -267,7 +267,7 @@ void MeshCombiner::combine(Operation operation)
     std::vector<SubSurface> secondSubSurfaces;
     {
         std::vector<std::vector<size_t>> edgeLoops;
-        std::vector<std::vector<size_t>> triangles;
+        std::vector<Face> triangles;
         doReTriangulation(&m_firstMesh, newEdgesPerTriangleInFirstMesh, triangles, edgeLoops);
         addUnIntersectedFaces(&m_firstMesh, reTriangulatedFacesInFirstMesh, triangles);
         EdgeLoop::merge(edgeLoops);
@@ -275,7 +275,7 @@ void MeshCombiner::combine(Operation operation)
     }
     {
         std::vector<std::vector<size_t>> edgeLoops;
-        std::vector<std::vector<size_t>> triangles;
+        std::vector<Face> triangles;
         doReTriangulation(&m_secondMesh, newEdgesPerTriangleInSecondMesh, triangles, edgeLoops);
         addUnIntersectedFaces(&m_secondMesh, reTriangulatedFacesInSecondMesh, triangles);
         EdgeLoop::merge(edgeLoops);
