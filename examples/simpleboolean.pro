@@ -1,8 +1,13 @@
-CONFIG += release
-DEFINES += NDEBUG
+TARGET = simpleboolean
+TEMPLATE = app
 
-INCLUDEPATH += ./
-INCLUDEPATH += thirdparty/moller97
+QT += widgets opengl
+CONFIG += debug
+
+INCLUDEPATH += ../
+INCLUDEPATH += ../thirdparty/moller97
+
+VPATH += ../
 
 HEADERS += simpleboolean/meshdatatype.h
 
@@ -35,6 +40,12 @@ HEADERS += simpleboolean/triangulate.h
 
 SOURCES += thirdparty/moller97/tritri_isectline.cpp
 HEADERS += thirdparty/moller97/tritri_isectline.h
+
+SOURCES += renderwidget.cpp
+HEADERS += renderwidget.h
+
+SOURCES += mainwindow.cpp
+HEADERS += mainwindow.h
 
 SOURCES += main.cpp
 
