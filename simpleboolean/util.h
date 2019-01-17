@@ -7,6 +7,7 @@ namespace simpleboolean
 
 float distanceSquaredOfVertices(const Vertex &first, const Vertex &second);
 float distanceOfVertices(const Vertex &first, const Vertex &second);
+float isNull(float number);
 
 }
 

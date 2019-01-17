@@ -1,5 +1,6 @@
 #include <simpleboolean/util.h>
 #include <QVector3D>
+#include <QtGlobal>
 
 namespace simpleboolean
 {
@@ -17,6 +18,11 @@ float distanceSquaredOfVertices(const Vertex &first, const Vertex &second)
 float distanceOfVertices(const Vertex &first, const Vertex &second)
 {
     return (vertexToQVector3D(first) - vertexToQVector3D(second)).length();
+}
+
+float isNull(float number)
+{
+    return qFuzzyIsNull(number);
 }
 
 }

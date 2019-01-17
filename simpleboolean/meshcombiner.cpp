@@ -11,8 +11,8 @@
 namespace simpleboolean
 {
 
-size_t MeshCombiner::m_maxOctreeDepth = 10;
-size_t MeshCombiner::m_minIntersectsInOctant = 2;
+size_t MeshCombiner::m_maxOctreeDepth = 3;
+size_t MeshCombiner::m_minIntersectsInOctant = 10;
 int MeshCombiner::m_vertexToKeyMultiplyFactor = 1000;
 
 void MeshCombiner::setMeshes(const Mesh &first, const Mesh &second)
@@ -74,6 +74,7 @@ void MeshCombiner::searchPotentialIntersectedPairs(std::vector<std::pair<size_t,
     std::set<std::pair<size_t, size_t>> histories;
     while (!octants.empty()) {
         auto item = octants.front();
+        //printf("item.first:%d octants.size:%d\r\n", item.first, octants.size());
         octants.pop();
         std::vector<size_t> firstGroupCandidates;
         std::vector<size_t> secondGroupCandidates;
@@ -85,6 +86,15 @@ void MeshCombiner::searchPotentialIntersectedPairs(std::vector<std::pair<size_t,
             if (item.second.intersectWith(m_secondMeshFaceAABBs[i]))
                 secondGroupCandidates.push_back(i);
         }
+        printf("depth:%lu {%.2f,%.2f,%.2f -> %.2f,%.2f,%.2f} firstNum:%lu secondNum:%lu\r\n",
+            item.first,
+            item.second.lowerBound().xyz[0],
+            item.second.lowerBound().xyz[1],
+            item.second.lowerBound().xyz[2],
+            item.second.upperBound().xyz[0],
+            item.second.upperBound().xyz[1],
+            item.second.upperBound().xyz[2],
+            firstGroupCandidates.size(), secondGroupCandidates.size());
         if (0 == firstGroupCandidates.size() || 0 == secondGroupCandidates.size())
             continue;
         if ((firstGroupCandidates.size() < MeshCombiner::m_minIntersectsInOctant &&
@@ -102,7 +112,8 @@ void MeshCombiner::searchPotentialIntersectedPairs(std::vector<std::pair<size_t,
             continue;
         }
         std::vector<AxisAlignedBoudingBox> children;
-        item.second.makeOctree(children);
+        if (!item.second.makeOctree(children))
+            continue;
         for (const auto &child: children) {
             octants.push({item.first + 1, child});
         }
@@ -270,6 +281,10 @@ void MeshCombiner::combine(Operation operation)
         std::vector<Face> triangles;
         doReTriangulation(&m_firstMesh, newEdgesPerTriangleInFirstMesh, triangles, edgeLoops);
         addUnIntersectedFaces(&m_firstMesh, reTriangulatedFacesInFirstMesh, triangles);
+        
+        m_debugFirstMeshReTriangulated.faces = triangles;
+        m_debugFirstMeshReTriangulated.vertices = m_newVertices;
+        
         EdgeLoop::merge(edgeLoops);
         SubSurface::createSubSurfaces(edgeLoops, triangles, firstSubSurfaces);
     }

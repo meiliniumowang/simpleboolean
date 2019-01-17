@@ -137,6 +137,8 @@ void ReTriangulation::reTriangulate(const std::vector<Vertex> &vertices,
                     break;
                 }
             }
+            if (!foundNextVert)
+                break;
             if (loopVert == startVert) {
                 for (const auto &vert: loop) {
                     auto findVert = halfEdgeLinkMap.find(vert);
@@ -149,8 +151,6 @@ void ReTriangulation::reTriangulate(const std::vector<Vertex> &vertices,
                 newEdgeLoopGenerated = true;
                 break;
             }
-            if (!foundNextVert)
-                break;
         }
         if (!newEdgeLoopGenerated)
             break;

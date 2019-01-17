@@ -1,4 +1,5 @@
 #include <simpleboolean/axisalignedboundingbox.h>
+#include <simpleboolean/util.h>
 #include <cmath>
 
 namespace simpleboolean
@@ -58,7 +59,7 @@ bool AxisAlignedBoudingBox::intersectWith(const AxisAlignedBoudingBox &other, Ax
     return true;
 }
 
-void AxisAlignedBoudingBox::makeOctree(std::vector<AxisAlignedBoudingBox> &octants)
+bool AxisAlignedBoudingBox::makeOctree(std::vector<AxisAlignedBoudingBox> &octants)
 {
     Vertex origin = {{(m_min.xyz[0] + m_max.xyz[0]) * 0.5f,
         (m_min.xyz[1] + m_max.xyz[1]) * 0.5f,
@@ -69,6 +70,8 @@ void AxisAlignedBoudingBox::makeOctree(std::vector<AxisAlignedBoudingBox> &octan
         abs(m_min.xyz[1] - m_max.xyz[1]) * 0.5f,
         abs(m_min.xyz[2] - m_max.xyz[2]) * 0.5f
     }};
+    if (isNull(radius.xyz[0]) || isNull(radius.xyz[1]) || isNull(radius.xyz[2]))
+        return false;
     octants.resize(8);
     for (size_t i = 0; i < octants.size(); ++i) {
         Vertex newOrigin = origin;
@@ -82,6 +85,7 @@ void AxisAlignedBoudingBox::makeOctree(std::vector<AxisAlignedBoudingBox> &octan
             octants[i].upperBound().xyz[j] = newOrigin.xyz[j] + radius.xyz[j] * 0.5f;
         }
     }
+    return true;
 }
 
 }

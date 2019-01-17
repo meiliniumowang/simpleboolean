@@ -41,8 +41,14 @@ HEADERS += simpleboolean/triangulate.h
 SOURCES += thirdparty/moller97/tritri_isectline.cpp
 HEADERS += thirdparty/moller97/tritri_isectline.h
 
-SOURCES += renderwidget.cpp
-HEADERS += renderwidget.h
+SOURCES += glwidget.cpp
+HEADERS += glwidget.h
+
+SOURCES += testmesh.cpp
+HEADERS += testmesh.h
+
+SOURCES += model.cpp
+HEADERS += model.h
 
 SOURCES += mainwindow.cpp
 HEADERS += mainwindow.h

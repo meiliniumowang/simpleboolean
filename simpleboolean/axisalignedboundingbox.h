@@ -14,7 +14,7 @@ public:
     Vertex &lowerBound();
     Vertex &upperBound();
     bool intersectWith(const AxisAlignedBoudingBox &other, AxisAlignedBoudingBox *result=nullptr) const;
-    void makeOctree(std::vector<AxisAlignedBoudingBox> &octants);
+    bool makeOctree(std::vector<AxisAlignedBoudingBox> &octants);
     
 private:
     Vertex m_min = {

@@ -16,6 +16,9 @@ public:
     void combine(Operation operation);
     const Mesh &getResult();
     
+    // Debug only
+    Mesh m_debugFirstMeshReTriangulated;
+    
 private:
     void searchPotentialIntersectedPairs(std::vector<std::pair<size_t, size_t>> &pairs);
     bool intersectTwoFaces(size_t firstIndex, size_t secondIndex, std::pair<Vertex, Vertex> &newEdge);

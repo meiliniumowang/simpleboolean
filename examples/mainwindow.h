@@ -1,8 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 #include <QWidget>
-
-class RenderWidget;
+#include "glwidget.h"
 
 class MainWindow : public QWidget 
 {
@@ -15,7 +14,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);
 
 private:
-	RenderWidget *m_renderWidget;
+	GLWidget *m_renderWidget;
 };
 
 #endif
